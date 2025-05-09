@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSH Setup Guide</title>
+    <style>
+        body {
+            background-color: #2d2d2d;
+            color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2 {
+            color: #ff8c00;
+            text-align: center;
+        }
+        h3 {
+            color: #4caf50;
+        }
+        .content {
+            margin: 20px;
+        }
+        .code {
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: block;
+            margin: 10px 0;
+            word-wrap: break-word;
+        }
+        .step {
+            margin-bottom: 20px;
+        }
+        ul {
+            line-height: 1.6;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>SSH Setup Guide for Remote Access</h1>
+
+    <div class="content">
+        <h2>Step 1: Set Up SSH on School PC</h2>
+        <div class="step">
+            <h3>On the School PC (Windows 10)</h3>
+            <ul>
+                <li>Go to <strong>Settings</strong> → <strong>Apps</strong> → <strong>Optional Features</strong>.</li>
+                <li>Scroll down and click <strong>Aadd a feature</strong>, then search for <strong>OpenSSH server</strong> and install it.</li>
+                <li>Once installed, open <strong>Services</strong> (search `services.msc` in the Start menu).</li>
+              <li>Find <strong>OpenSSH SSH Server</strong>, right-click, and choose **Start**.</li>
+                <li>Make sure the SSH server is set to **Automatic** startup.</li>
+              <li>Allow <strong>SSH</strong> through the firewall by going to <strong>Windows Defender Firewall</strong> → <strong>Allow an app or feature</strong>.</li>
+            </ul>
+        </div>
+
+        <h3>For Linux (Ubuntu)</h3>
+        <ul>
+            <li>Install <strong>OpenSSH Server</strong> by running:
+                <code class="code">sudo apt update && sudo apt install openssh-server</code></li>
+            <li>Check if SSH is running:
+                <code class="code">sudo systemctl status ssh</code></li>
+            <li>Start the SSH service if it isn't already running:
+                <code class="code">sudo systemctl start ssh</code></li>
+        </ul>
+
+        <h2>Step 2: Set Up Port Forwarding on the Router</h2>
+        <div class="step">
+            <ul>
+              <li>Login to the <strong>router</strong> using the local IP address (e.g., `192.168.x.x`).</li>
+              <li>Go to the <strong>Port Forwarding</strong> section.</li>
+                <li>Forward port <strong>22</strong> (SSH) to the internal IP of the school PC (e.g., `192.168.x.x`).</li>
+                <li>Save the changes and restart the router if needed.</li>
+            </ul>
+        </div>
+
+        <h2>Step 3: Find the Public IP of the School Router</h2>
+        <div class="step">
+            <ul>
+                <li>Visit <strong>WhatIsMyIP</strong> from the school network to find the public IP address of the router (e.g., `223.223.65.221`).</li>
+                <li>Note down the <strong>public IP address</strong>. This is needed for remote access.</li>
+            </ul>
+        </div>
+
+        <h2>Step 4: Connect to the School PC from Your Home</h2>
+        <div class="step">
+            <ul>
+              <li>Open the <strong>Terminal</strong> on your home laptop (Linux, macOS, or Windows with SSH client installed).</li>
+                <li>Run the following SSH command to connect:
+                    <code class="code">ssh stk@223.223.65.221</code></li>
+                <li>You'll be prompted for the <strong>password</strong> of the `stk` account on the school PC.</li>
+              <li>If using a custom SSH port (e.g., port <strong>2222</strong>), use:
+                    <code class="code">ssh -p 2222 stk@223.223.65.221</code></li>
+            </ul>
+        </div>
+
+        <h2>Optional: Set Up SSH Key Authentication (For Secure Access)</h2>
+        <div class="step">
+            <ul>
+                <li>Generate an SSH key pair on your home laptop using:
+                    <code class="code">ssh-keygen</code></li>
+                <li>Copy the <strong>public key</strong> to the school PC by running:
+                    <code class="code">ssh-copy-id stk@223.223.65.221</code></li>
+                <li>Once the key is copied, you will no longer need to enter the password for future connections.</li>
+            </ul>
+        </div>
+    </div>
+
+</body>
+</html>
